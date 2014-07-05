@@ -1,0 +1,28 @@
+body {
+    font-family: 'Fira Sans';
+    font-weight: 500;
+
+    background: #33FFD6;
+    background-image: -ms-linear-gradient(top, #33FFD6 0%, #00A3EF 100%);
+    background-image: -moz-linear-gradient(top, #33FFD6 0%, #00A3EF 100%);
+    background-image: -o-linear-gradient(top, #33FFD6 0%, #00A3EF 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #33FFD6), color-stop(1, #00A3EF));
+    background-image: -webkit-linear-gradient(top, #33FFD6 0%, #00A3EF 100%);
+    background-image: linear-gradient(to bottom, #33FFD6 0%, #00A3EF 100%);
+    min-height: 700px;
+}
+
+p {
+    font-size: 30px;
+}
+
+a {
+    color: #00B7FF;
+}
+
+h1 {
+    font-size: 50px;
+    color: white;
+}
+
+h1.title { text-align: center; text-shadow: 1px 1px 1px rgba(0,0,0,.4); }
