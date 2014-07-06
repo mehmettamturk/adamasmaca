@@ -34,10 +34,12 @@ h1.result {
     text-align: center;
 }
 
+.infoContainer { float: left; }
+
 .buttons {
-    width: 500px;
-    margin: 0 auto;
+    width: 50%;
     text-align: center;
+    float: left;
 }
 
 button.alphabet {
@@ -58,13 +60,22 @@ button.alphabet[disabled] {
     opacity: .5;
 }
 
-span.trialCount {
-    position: absolute;
-    right: 20px;
-    top: 20px;
+.numberContainer {
+    width: 25%;
+    float: left;
+}
+.numberContainer p {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+    text-decoration: underline;
+}
+
+.numberContainer .numberInfo {
+    margin: 0 auto;
+    width: 60px;
     border: 4px solid darkblue;
     border-radius: 50%;
-    width: 60px;
     height: 60px;
     text-align: center;
     line-height: 60px;

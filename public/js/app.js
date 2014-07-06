@@ -17,19 +17,32 @@ angular.module('adamAsmaca', [ 'ngRoute' ]).config(['$routeProvider', function($
 }]);
 
 
-angular.module('adamAsmaca').controller('MainCtrl', ['$scope', function($scope) {
+angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', function($scope, WordService) {
     $scope.alphabet = "abcçdefghıijklmnoöprsştuüvyz".split('');
-    $scope.word = 'Kıymalı Börek'.toLowerCase();
-    $scope.result = '';
-    $scope.userChoices = [];
-    $scope.trial = 6;
+    $scope.points = {
+        easy: 10,
+        normal: 20,
+        hard: 30
+    };
 
-    for (var i = 0; i < $scope.word.length; i++) {
-        if ($scope.word[i] == ' ' || $scope.word[i] == '?')
-            $scope.result += $scope.word[i];
-        else
-            $scope.result += '_';
-    }
+    WordService.getWord('easy', function(data) {
+        $scope.showWord(data.word, data.category);
+    });
+
+    $scope.showWord = function(word, category) {
+        $scope.word = word.toLowerCase();
+        $scope.result = '';
+        $scope.userChoices = [];
+        $scope.trial = 6;
+        $scope.wordPoint = $scope.points[category];
+
+        for (var i = 0; i < $scope.word.length; i++) {
+            if ($scope.word[i] == ' ' || $scope.word[i] == '?')
+                $scope.result += $scope.word[i];
+            else
+                $scope.result += '_';
+        }
+    };
 
     $scope.check = function(char) {
         char = char.toLowerCase();
@@ -41,14 +54,15 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', function($scope) 
                 isFound = true;
 
                 if ($scope.word == $scope.result)
-                    alert('Dogru.');
+                    alert('Aferin.');
             }
         });
 
         if (!isFound) {
             $scope.trial--;
+            $scope.wordPoint--;
             if ($scope.trial == 0)
-                alert('Yanlis');
+                alert('Malesef bilemedin.');
         }
     };
 
@@ -62,6 +76,19 @@ angular.module('adamAsmaca').controller('UserCtrl', ['$scope', '$route', '$http'
         $scope.userData = data;
     });
 }]);
+
+
+angular.module('adamAsmaca').factory('WordService', function($http) {
+    var WordService = {};
+
+    WordService.getWord = function(category, callback) {
+        $http.get('/words/' + category).success(function(data) {
+            callback(data);
+        })
+    };
+
+    return WordService;
+});
 
 
 angular.module('adamAsmaca').factory('UserService', function($http) {

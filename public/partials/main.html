@@ -1,9 +1,23 @@
 <h1 class="title"> Adam Asmaca </h1>
 
-<span class="trialCount"> {{trial}} </span>
+
 
 <h1 class="result" ng-bind="result | uppercase"></h1>
 
-<div class="buttons">
-    <button class="alphabet" ng-repeat="char in alphabet" ng-click="check(char); " ng-disabled="userChoices.indexOf(char) > -1" ng-bind="char"></button>
+<div class="infoContainer">
+    <div class="numberContainer">
+        <p>Life</p>
+        <div class="numberInfo"> {{trial}} </div>
+    </div>
+    <div class="buttons">
+        <button class="alphabet" ng-repeat="char in alphabet" ng-click="check(char); " ng-disabled="userChoices.indexOf(char) > -1" ng-bind="char"></button>
+    </div>
+    <div class="numberContainer">
+        <p>Points</p>
+        <div class="numberInfo"> {{wordPoint}} </div>
+    </div>
+</div>
+
+<div class="userList">
+    <!-- Show user list here (Leaderboard) -->
 </div>
