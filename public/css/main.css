@@ -30,11 +30,44 @@ h1.title {
     text-shadow: 1px 1px 1px rgba(0,0,0,.4);
 }
 
-button.alphabet {
-    background: transparent;
-    color: white;
-    padding: 10px;
-    cursor: pointer;
+h1.result {
+    text-align: center;
 }
 
-button.alphabet[disabled] { background: gray; }
+.buttons {
+    width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+button.alphabet {
+    background: rgba(0,0,0,.1);
+    color: white;
+    width: 50px;
+    padding: 20px 0;
+    cursor: pointer;
+    border: none;
+}
+
+button.alphabet:hover {
+    background: rgba(0,0,0,.2);
+}
+
+button.alphabet[disabled] {
+    background: gray;
+    opacity: .5;
+}
+
+span.trialCount {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    border: 4px solid darkblue;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 40px;
+    color: darkblue;
+}

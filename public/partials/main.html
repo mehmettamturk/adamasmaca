@@ -1,7 +1,9 @@
 <h1 class="title"> Adam Asmaca </h1>
 
-<h2> {{trial}}</h2>
+<span class="trialCount"> {{trial}} </span>
 
-<button class="alphabet" ng-repeat="char in alphabet" ng-click="check(char); " ng-disabled="userChoices.indexOf(char) > -1">{{char}}</button>
+<h1 class="result" ng-bind="result | uppercase"></h1>
 
-<h1 ng-bind="result"></h1>
+<div class="buttons">
+    <button class="alphabet" ng-repeat="char in alphabet" ng-click="check(char); " ng-disabled="userChoices.indexOf(char) > -1" ng-bind="char"></button>
+</div>

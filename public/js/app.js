@@ -19,16 +19,20 @@ angular.module('adamAsmaca', [ 'ngRoute' ]).config(['$routeProvider', function($
 
 angular.module('adamAsmaca').controller('MainCtrl', ['$scope', function($scope) {
     $scope.alphabet = "abcçdefghıijklmnoöprsştuüvyz".split('');
-    $scope.word = 'esra';
+    $scope.word = 'Kıymalı Börek'.toLowerCase();
     $scope.result = '';
     $scope.userChoices = [];
     $scope.trial = 6;
 
-    for (var i=0; i<$scope.word.length; i++) {
-        $scope.result += '_';
+    for (var i = 0; i < $scope.word.length; i++) {
+        if ($scope.word[i] == ' ' || $scope.word[i] == '?')
+            $scope.result += $scope.word[i];
+        else
+            $scope.result += '_';
     }
 
     $scope.check = function(char) {
+        char = char.toLowerCase();
         var isFound = false;
         $scope.userChoices.push(char);
         angular.forEach($scope.word, function(wordChar, index) {
