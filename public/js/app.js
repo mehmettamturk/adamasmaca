@@ -18,7 +18,36 @@ angular.module('adamAsmaca', [ 'ngRoute' ]).config(['$routeProvider', function($
 
 
 angular.module('adamAsmaca').controller('MainCtrl', ['$scope', function($scope) {
-    $scope.sth = true;
+    $scope.alphabet = "abcçdefghıijklmnoöprsştuüvyz".split('');
+    $scope.word = 'esra';
+    $scope.result = '';
+    $scope.userChoices = [];
+    $scope.trial = 6;
+
+    for (var i=0; i<$scope.word.length; i++) {
+        $scope.result += '_';
+    }
+
+    $scope.check = function(char) {
+        var isFound = false;
+        $scope.userChoices.push(char);
+        angular.forEach($scope.word, function(wordChar, index) {
+            if (wordChar == char) {
+                $scope.result = $scope.result.substr(0, index) + char + $scope.result.substr(index + 1);
+                isFound = true;
+
+                if ($scope.word == $scope.result)
+                    alert('Dogru.');
+            }
+        });
+
+        if (!isFound) {
+            $scope.trial--;
+            if ($scope.trial == 0)
+                alert('Yanlis');
+        }
+    };
+
 }]);
 
 
