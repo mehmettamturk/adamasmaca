@@ -37,13 +37,13 @@ var userSchema = new mongoose.Schema({
 });
 
 var User = mongoose.model('User', userSchema);
-
-/* Sample User
+/*
+// Sample User
 var data = {
-    'username:': 'ali',
+    'username': 'fatma',
     'mail': 'ali@veli.com',
-    'pasword': '123456',
-    'score': 10
+    'password': '123456',
+    'score': 4
 };
 
 var user = new User(data);
@@ -52,7 +52,15 @@ user.save();
 
 app.get('/user/:username', function(req, res) {
     var username = req.params.username;
-    res.send(username);
+    User.find({username:username}, "-password -score", function(err, data) {
+        res.send(data);
+    });
+});
+
+app.get('/users', function(req, res) {
+    User.find({}).sort({score: -1}).exec(function(err, data) {
+        res.json(data);
+    });
 });
 
 module.exports = app;
