@@ -34,7 +34,29 @@ h1.result {
     text-align: center;
 }
 
-.infoContainer { float: left; }
+button {
+    border-style:none;
+    text-align: center; background-color:dodgerblue; color:honeydew;
+    font-size: 25px; width: 200px; height: 50px;
+}
+
+.buttonContainer { text-align: center; }
+
+.infoContainer {
+    float: left;
+    height: 0; overflow: hidden;
+    -webkit-transition: height 1s;
+    transition: height 1s;
+}
+.infoContainer.shown { display: block; height: 400px; }
+
+.resultContainer { height: 0; overflow: hidden;
+    -webkit-transition: height 1s;
+    transition: height 1s;
+}
+.resultContainer.shown { height: 400px; }
+.resultContainer p { color: white; text-align: center; margin-bottom: 20px; }
+.resultContainer p span { color: blue; }
 
 .buttons {
     width: 50%;
@@ -46,7 +68,7 @@ button.alphabet {
     background: rgba(0,0,0,.1);
     color: white;
     width: 50px;
-    padding: 20px 0;
+    padding: 10px 0;
     cursor: pointer;
     border: none;
 }

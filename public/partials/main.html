@@ -1,22 +1,41 @@
 <h1 class="title"> Adam Asmaca </h1>
 
+<div class="buttonContainer" ng-hide="hideStartButton">
+    <button ng-click="start(); hideStartButton = true;"> Basla </button>
+</div>
 
 
 <h1 class="result" ng-bind="result | uppercase"></h1>
 
-<div class="infoContainer">
+<div class="infoContainer" ng-class="{'shown': questionShown}">
     <div class="numberContainer">
-        <p>Life</p>
+        <p>Kalan Hak</p>
         <div class="numberInfo"> {{trial}} </div>
     </div>
     <div class="buttons">
         <button class="alphabet" ng-repeat="char in alphabet" ng-click="check(char); " ng-disabled="userChoices.indexOf(char) > -1" ng-bind="char"></button>
     </div>
     <div class="numberContainer">
-        <p>Points</p>
+        <p>Puan</p>
         <div class="numberInfo"> {{wordPoint}} </div>
     </div>
 </div>
+<div class="resultContainer" ng-class="{'shown': resultShown}">
+    <div ng-show="isCorrect">
+        <p> Tebrikler bildin ve <span>{{totalPoints}}</span> puana ulaştın. </p>
+        <div class="buttonContainer">
+            <button ng-click="nextQuestion()"> Sıradaki Soru </button>
+        </div>
+    </div>
+    <div ng-show="!isCorrect">
+        <p> Ne yazık ki bilemedin :( </p>
+        <div class="buttonContainer">
+            <button ng-click="start()"> Yeniden Başla </button>
+        </div>
+    </div>
+
+</div>
+
 
 <div class="userList">
     <!-- Show user list here (Leaderboard) -->
