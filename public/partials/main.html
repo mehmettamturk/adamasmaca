@@ -20,7 +20,7 @@
         <div class="numberInfo"> {{wordPoint}} </div>
     </div>
 </div>
-<div class="resultContainer" ng-class="{'shown': resultShown}">
+<div class="resultContainer" ng-show="resultShown">
     <div ng-show="isCorrect">
         <p> Tebrikler bildin ve <span>{{totalPoints}}</span> puana ulaştın. </p>
         <div class="buttonContainer">

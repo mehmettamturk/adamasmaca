@@ -107,9 +107,9 @@ word7.save();
 word8.save();
 word9.save();
 
- */
+ 
 
-/*
+
  // Sample User
  var data = {
  'username': 'fatma',
@@ -120,4 +120,5 @@ word9.save();
 
  var user = new User(data);
  user.save();
- */
+ 
+*/

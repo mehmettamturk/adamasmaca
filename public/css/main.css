@@ -9,7 +9,8 @@ body {
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #33FFD6), color-stop(1, #00A3EF));
     background-image: -webkit-linear-gradient(top, #33FFD6 0%, #00A3EF 100%);
     background-image: linear-gradient(to bottom, #33FFD6 0%, #00A3EF 100%);
-    min-height: 700px;
+    background-size: 100%;
+    background-attachment: fixed;
 }
 
 p {
@@ -43,18 +44,13 @@ button {
 .buttonContainer { text-align: center; }
 
 .infoContainer {
-    float: left;
-    height: 0; overflow: hidden;
-    -webkit-transition: height 1s;
-    transition: height 1s;
+    float: left;width: 100%;
+    opacity: 0;
+    -webkit-transition: opacity 1s;
+    transition: opacity 1s;
 }
-.infoContainer.shown { display: block; height: 400px; }
+.infoContainer.shown { display: block;opacity:1; }
 
-.resultContainer { height: 0; overflow: hidden;
-    -webkit-transition: height 1s;
-    transition: height 1s;
-}
-.resultContainer.shown { height: 400px; }
 .resultContainer p { color: white; text-align: center; margin-bottom: 20px; }
 .resultContainer p span { color: blue; }
 

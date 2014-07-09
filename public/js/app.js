@@ -41,6 +41,7 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
 
     $scope.nextQuestion = function() {
         $scope.isCorrect = false;
+        $scope.resultShown = false;
         if ($scope.currentCategory == 'easy')
             $scope.currentCategory = 'normal';
         else if ($scope.currentCategory == 'normal')
