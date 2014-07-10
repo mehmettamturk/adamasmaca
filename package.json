@@ -1,6 +1,7 @@
 {
   "name": "adamasmaca",
   "version": "0.0.1",
+  "repository": "git://adamasmaca.git",
   "scripts": {
     "start": "node ./bin/start"
   },
