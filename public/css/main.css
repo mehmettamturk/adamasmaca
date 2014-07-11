@@ -1,3 +1,6 @@
+* {
+    letter-spacing: -1px;
+}
 body {
     font-family: 'Fira Sans';
     font-weight: 500;
@@ -33,6 +36,7 @@ h1.title {
 
 h1.result {
     text-align: center;
+    letter-spacing: 0;
 }
 
 button {
@@ -85,18 +89,98 @@ button.alphabet[disabled] {
 .numberContainer p {
     text-align: center;
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-decoration: underline;
+    width: 100%;
+    font-size: 20px;
 }
+
+.numberContainer .numberSection { width: 50%; float: left;}
 
 .numberContainer .numberInfo {
     margin: 0 auto;
-    width: 60px;
-    border: 4px solid darkblue;
-    border-radius: 50%;
-    height: 60px;
     text-align: center;
-    line-height: 60px;
-    font-size: 40px;
+    line-height: 30px;
+    font-size: 30px;
     color: darkblue;
+
 }
+
+.stickmanContainer {
+    width: 25%;
+    float: left;
+}
+.stickmanContainer .stickman {
+    width: 60px;
+}
+
+.stickman .head { height: 50px; width: 50px; border: 4px solid #000000; border-radius: 50%; position: relative; }
+.stickman .head .eyes {
+    position: absolute;
+    top: 9px;
+    left: 16px;
+}
+.stickman .head .eyes span { margin-right: 10px; }
+.stickman .head .eyes span.near { margin-right: 4px; }
+.stickman .head .mouth {
+    width: 24px;
+    height: 12px;
+    position: absolute;
+    top: 26px;
+    left: 14px;
+
+    border-radius: 51%;
+    border: 2px solid black;
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+}
+.stickman .head .mouth.sad {
+    border-bottom: 0;
+    border-top: 2px solid black;
+    top: 33px;
+}
+.stickman .head .mouth.middle {
+    height: 0;
+    top: 36px;
+}
+.stickman .head .mouth.last {
+    top: 30px;
+    border: 1px solid black;
+    left: 13px;
+}
+.stickman .head .mouth.died {
+    top: 30px;
+    left: 13px;
+    border: 1px solid black;
+}
+.stickman .head .mouth.died:after {
+    content: '';
+    display: inline-block;
+    height: 14px;
+    width: 10px;
+    background: red;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: relative;
+    top: 5px;
+    left: 8px;
+    -webkit-transform: rotate(-10deg);
+}
+.stickman .body { height: 200px; position: relative; }
+.stickman .body .line { height: 130px; width: 4px; background: black; position: relative; left: 25px; }
+.stickman .body .arms, .stickman .body .legs { position: absolute; top: 10px;}
+.stickman .body .legs { top: 124px; }
+.stickman .body .arms span,.stickman .body .legs span { width: 4px; height: 40px; background: black; display: inline-block; }
+.stickman .body .arms span, .stickman .body .legs span { position: relative; }
+.stickman .body .arms span.left, .stickman .body .legs span.left {
+    transform: rotate(30deg);
+    -webkit-transform: rotate(30deg);
+    left: 15px;
+}
+.stickman .body .arms span.right, .stickman .body .legs span.right {
+    transform: rotate(-30deg);
+    -webkit-transform: rotate(-30deg);
+    left: 28px;
+}
+

@@ -1,7 +1,7 @@
 <h1 class="title"> Adam Asmaca </h1>
 
 <div class="buttonContainer" ng-hide="hideStartButton">
-    <button ng-click="start(); hideStartButton = true;"> Basla </button>
+    <button ng-click="start(); hideStartButton = true;"> Başla </button>
 </div>
 
 
@@ -9,15 +9,41 @@
 
 <div class="infoContainer" ng-class="{'shown': questionShown}">
     <div class="numberContainer">
-        <p>Kalan Hak</p>
-        <div class="numberInfo"> {{trial}} </div>
+        <div class="numberSection">
+            <p> Kalan Hak </p>
+            <div class="numberInfo"> {{trial}} </div>
+        </div>
+        <div class="numberSection">
+            <p> Puan </p>
+            <div class="numberInfo"> {{wordPoint}} </div>
+        </div>
     </div>
     <div class="buttons">
         <button class="alphabet" ng-repeat="char in alphabet" ng-click="check(char); " ng-disabled="userChoices.indexOf(char) > -1" ng-bind="char"></button>
     </div>
-    <div class="numberContainer">
-        <p>Puan</p>
-        <div class="numberInfo"> {{wordPoint}} </div>
+    <div class="stickmanContainer">
+        <div class="stickman">
+            <div class="head">
+                <div class="eyes">
+                    <span ng-hide="mouthClass == 'died'">.</span>
+                    <span ng-hide="mouthClass == 'died'">.</span>
+                    <span class="near" ng-show="mouthClass == 'died'">x</span>
+                    <span class="near" ng-show="mouthClass == 'died'">x</span>
+                </div>
+                <div class="mouth" ng-class="mouthClass"></div>
+            </div>
+            <div class="body">
+                <div class="line"></div>
+                <div class="arms">
+                    <span class="left"></span>
+                    <span class="right"></span>
+                </div>
+                <div class="legs">
+                    <span class="left"></span>
+                    <span class="right"></span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="resultContainer" ng-show="resultShown">
@@ -35,6 +61,8 @@
     </div>
 
 </div>
+
+
 
 
 <div class="userList">

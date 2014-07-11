@@ -29,6 +29,7 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
         normal: 20,
         hard: 30
     };
+    $scope.mouthClass = 'happy';
 
     $scope.start = function() {
         $scope.totalPoints = 0;
@@ -60,6 +61,7 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
         $scope.userChoices = [];
         $scope.trial = 6;
         $scope.wordPoint = $scope.points[category];
+        $scope.mouthClass = 'happy';
 
         for (var i = 0; i < $scope.word.length; i++) {
             if ($scope.word[i] == ' ' || $scope.word[i] == '?')
@@ -80,9 +82,13 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
 
                 if ($scope.word == $scope.result) {
                     $scope.totalPoints += ($scope.points[$scope.currentCategory] - (6 - $scope.trial));
-                    $scope.questionShown = false;
                     $scope.resultShown = true;
                     $scope.isCorrect = true;
+                    setTimeout(function() {
+                        $scope.questionShown = false;
+                        $scope.mouthClass = 'happy';
+                        $scope.$digest();
+                    }, 2000);
                 }
             }
         });
@@ -90,11 +96,24 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
         if (!isFound) {
             $scope.trial--;
             $scope.wordPoint--;
+
             if ($scope.trial == 0) {
-                $scope.questionShown = false;
                 $scope.resultShown = true;
                 $scope.totalPoints = 0;
+                setTimeout(function() {
+                    $scope.questionShown = false;
+                    $scope.$digest();
+                }, 3000);
             }
+        }
+
+        switch ($scope.trial) {
+            case 5: $scope.mouthClass = 'happy'; break;
+            case 4: $scope.mouthClass = 'middle'; break;
+            case 3: $scope.mouthClass = 'middle'; break;
+            case 2: $scope.mouthClass = 'sad'; break;
+            case 1: $scope.mouthClass = 'last'; break;
+            case 0: $scope.mouthClass = 'died'; break;
         }
     };
 
