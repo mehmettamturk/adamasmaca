@@ -75,50 +75,60 @@ app.get('/words/:category', function(req, res) {
 
 module.exports = app;
 
-/*
- // Sample Words
-var data1 = { 'word': 'lahmacun', 'category': 'easy' };
-var data2 = { 'word': 'alacakaranlık', 'category': 'easy' };
-var data3 = { 'word': 'kelime', 'category': 'easy' };
-var data4 = { 'word': 'etiket', 'category': 'easy' };
-var data5 = { 'word': 'tabanca', 'category': 'normal' };
-var data6 = { 'word': 'yankı', 'category': 'normal' };
-var data7 = { 'word': 'kambur', 'category': 'normal' };
-var data8 = { 'word': 'zifiri', 'category': 'hard' };
-var data9 = { 'word': 'tornavida', 'category': 'hard' };
 
-var word1 = new Words(data1);
-var word2 = new Words(data2);
-var word3 = new Words(data3);
-var word4 = new Words(data4);
-var word5 = new Words(data5);
-var word6 = new Words(data6);
-var word7 = new Words(data7);
-var word8 = new Words(data8);
-var word9 = new Words(data9);
+function setupDb() {
+    var words = [
+        { 'word': 'lahmacun', 'category': 'easy' },
+        { 'word': 'alacakaranlık', 'category': 'easy' },
+        { 'word': 'kelime', 'category': 'easy' },
+        { 'word': 'etiket', 'category': 'easy' },
+        { 'word': 'erkek', 'category': 'easy' },
+        { 'word': 'tabanca', 'category': 'normal' },
+        { 'word': 'telefon', 'category': 'normal' },
+        { 'word': 'yankı', 'category': 'normal' },
+        { 'word': 'kambur', 'category': 'normal' },
+        { 'word': 'zifiri', 'category': 'hard' },
+        { 'word': 'tornavida', 'category': 'hard' }
+    ];
 
-word1.save();
-word2.save();
-word3.save();
-word4.save();
-word5.save();
-word6.save();
-word7.save();
-word8.save();
-word9.save();
+    words.forEach(function(word) {
+        Words.find({word: word.word}, function(err, data) {
+            if (!data.length) {
+                var dbWord = new Words(word);
+                dbWord.save();
+            }
+        })
+    });
 
- 
+    var users = [
+        {
+            username: 'fatma',
+            mail: 'fatma@gmail.com',
+            password: '123456',
+            score: 15
+        },
+        {
+            username: 'esra',
+            mail: 'esra@gmail.com',
+            password: '123456',
+            score: 18
+        },
+        {
+            'username': 'mehmet',
+            'mail': 'mehmet@gmail.com',
+            'password': '123456',
+            'score': 7
+        }
+    ];
 
+    users.forEach(function(user) {
+        User.find({mail: user.mail}, function(err, data) {
+            if (!data.length) {
+                var dbUser = new User(user);
+                dbUser.save();
+            }
+        })
+    });
+}
 
- // Sample User
- var data = {
- 'username': 'fatma',
- 'mail': 'ali@veli.com',
- 'password': '123456',
- 'score': 4
- };
-
- var user = new User(data);
- user.save();
- 
-*/
+setupDb();
