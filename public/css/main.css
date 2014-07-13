@@ -32,6 +32,7 @@ h1 {
 h1.title {
     text-align: center;
     text-shadow: 1px 1px 1px rgba(0,0,0,.4);
+    text-decoration: underline;
 }
 
 h1.result {
@@ -106,6 +107,7 @@ button.alphabet[disabled] {
 
 }
 
+/*
 .stickmanContainer {
     width: 25%;
     float: left;
@@ -183,4 +185,4 @@ button.alphabet[disabled] {
     -webkit-transform: rotate(-30deg);
     left: 28px;
 }
-
+*/

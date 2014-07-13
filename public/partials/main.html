@@ -19,9 +19,11 @@
         </div>
     </div>
     <div class="buttons">
-        <button class="alphabet" ng-repeat="char in alphabet" ng-click="check(char); " ng-disabled="userChoices.indexOf(char) > -1" ng-bind="char"></button>
+        <button class="alphabet" ng-repeat="char in alphabet" ng-click="check(char); " ng-disabled="userChoices.indexOf(char) > -1 || trial == 0" ng-bind="char"></button>
     </div>
     <div class="stickmanContainer">
+        <canvas id="canvas" width="160" height="210"></canvas>
+        <!--
         <div class="stickman">
             <div class="head">
                 <div class="eyes">
@@ -44,6 +46,7 @@
                 </div>
             </div>
         </div>
+        -->
     </div>
 </div>
 <div class="resultContainer" ng-show="resultShown">
