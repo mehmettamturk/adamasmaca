@@ -149,6 +149,7 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
         context.strokeStyle = 'black';
 
         drawFulArc(context, 50, 50 + add, 20, 0, 2 * Math.PI); // Drawing the Head
+        context.strokeStyle = 'black';
         drawArc(context, 50, 50 + add, 20, Math.PI, 0, false, 4); // Drawing the Hair
 
         if (smile == 'dead') {
@@ -193,6 +194,22 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
             drawLine(context, [80, 161], [80, 198], 'red', 3); // Right Taboret
         }
 
+
+        // Total Points
+        drawLine(context, [120, 25], [150, 25], '#B22705', 4);
+
+        context.fillStyle = '4936D6';
+        context.strokeStyle = 'red';
+        drawFulArc(context, 150, 25, 20, 0, 2 * Math.PI, false, '#B22705');
+        context.fillStyle = 'white';
+        context.font = '16pt Calibri';
+        var xPosition = 146;
+        if ($scope.totalPoints > 99)
+            xPosition = 134;
+        else  if ($scope.totalPoints > 9)
+            xPosition = 140;
+
+        context.fillText($scope.totalPoints, xPosition, 33);
     };
 
     // Canvas Methods
@@ -213,11 +230,18 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
         ctx.closePath();
     }
 
-    function drawFulArc(ctx, x, y, r, sAngle, eAngle, counterclockwise) {
+    function drawFulArc(ctx, x, y, r, sAngle, eAngle, counterclockwise, strokeStyle) {
         ctx.beginPath();
         ctx.arc(x, y, r, sAngle, eAngle, counterclockwise);
-        ctx.closePath();
         ctx.fill();
+
+        if (strokeStyle && strokeStyle.length) {
+            console.log('ss')
+            ctx.strokeStyle = strokeStyle;
+            ctx.stroke();
+        }
+
+        ctx.closePath();
     }
 
     function drawEllipse(ctx, x, y, w, h) {
