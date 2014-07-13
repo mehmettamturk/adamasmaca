@@ -91,7 +91,6 @@ button.alphabet[disabled] {
     text-align: center;
     color: white;
     margin-bottom: 10px;
-    text-decoration: underline;
     width: 100%;
     font-size: 20px;
 }

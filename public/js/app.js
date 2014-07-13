@@ -18,7 +18,7 @@ angular.module('adamAsmaca', [ 'ngRoute' ]).config(['$routeProvider', function($
 
 
 angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', function($scope, WordService) {
-    $scope.alphabet = "abcçdefghıijklmnoöprsştuüvyz".split('');
+    $scope.alphabet = "abcçdefgğhıijklmnoöprsştuüvyz".split('');
     $scope.totalPoints = 0;
     $scope.questionShown = false;
     $scope.resultShown = false;

@@ -1,4 +1,4 @@
-<h1 class="title"> Adam Asmaca </h1>
+<h1 class="title"> adam asmaca </h1>
 
 <div class="buttonContainer" ng-hide="hideStartButton">
     <button ng-click="start(); hideStartButton = true;"> Başla </button>
@@ -10,11 +10,11 @@
 <div class="infoContainer" ng-class="{'shown': questionShown}">
     <div class="numberContainer">
         <div class="numberSection">
-            <p> Kalan Hak </p>
+            <p> kalan hak </p>
             <div class="numberInfo"> {{trial}} </div>
         </div>
         <div class="numberSection">
-            <p> Puan </p>
+            <p> puan </p>
             <div class="numberInfo"> {{wordPoint}} </div>
         </div>
     </div>
@@ -51,15 +51,15 @@
 </div>
 <div class="resultContainer" ng-show="resultShown">
     <div ng-show="isCorrect">
-        <p> Tebrikler bildin ve <span>{{totalPoints}}</span> puana ulaştın. </p>
+        <p> tebrikler bildin ve <span>{{totalPoints}}</span> puana ulaştın. </p>
         <div class="buttonContainer">
-            <button ng-click="nextQuestion()"> Sıradaki Soru </button>
+            <button ng-click="nextQuestion()"> sıradaki soru </button>
         </div>
     </div>
     <div ng-show="!isCorrect">
-        <p> Ne yazık ki bilemedin :( </p>
+        <p> ne yazık ki bilemedin :( </p>
         <div class="buttonContainer">
-            <button ng-click="start()"> Yeniden Başla </button>
+            <button ng-click="start()"> yeniden başla </button>
         </div>
     </div>
 
