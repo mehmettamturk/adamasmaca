@@ -78,17 +78,39 @@ module.exports = app;
 
 function setupDb() {
     var words = [
-        { 'word': 'lahmacun', 'category': 'easy' },
         { 'word': 'alacakaranlık', 'category': 'easy' },
-        { 'word': 'kelime', 'category': 'easy' },
+        { 'word': 'arkadaş', 'category': 'easy' },
         { 'word': 'etiket', 'category': 'easy' },
         { 'word': 'erkek', 'category': 'easy' },
+        { 'word': 'harita', 'category': 'easy' },
+        { 'word': 'kimya', 'category': 'easy' },
+        { 'word': 'kelime', 'category': 'easy' },
+        { 'word': 'lahmacun', 'category': 'easy' },
+        { 'word': 'şekerpare', 'category': 'easy' },
+        { 'word': 'terlik', 'category': 'easy' },
+        { 'word': 'alafranga', 'category': 'normal' },
+        { 'word': 'bağlama', 'category': 'normal' },
+        { 'word': 'final', 'category': 'normal' },
+        { 'word': 'kambur', 'category': 'normal' },
+        { 'word': 'kanalizasyon', 'category': 'normal' },
+        { 'word': 'paratoner', 'category': 'normal' },
         { 'word': 'tabanca', 'category': 'normal' },
         { 'word': 'telefon', 'category': 'normal' },
+        { 'word': 'timsah', 'category': 'normal' },
+        { 'word': 'üniversite', 'category': 'normal' },
         { 'word': 'yankı', 'category': 'normal' },
-        { 'word': 'kambur', 'category': 'normal' },
-        { 'word': 'zifiri', 'category': 'hard' },
-        { 'word': 'tornavida', 'category': 'hard' }
+        { 'word': 'demeç', 'category': 'hard' },
+        { 'word': 'dergah', 'category': 'hard' },
+        { 'word': 'distrübütör', 'category': 'hard' },
+        { 'word': 'helikopter', 'category': 'hard' },
+        { 'word': 'ızdırap', 'category': 'hard' },
+        { 'word': 'korniş', 'category': 'hard' },
+        { 'word': 'otobüs', 'category': 'hard' },
+        { 'word': 'repertuar', 'category': 'hard' },
+        { 'word': 'tedavül', 'category': 'hard' },
+        { 'word': 'telepati', 'category': 'hard' },
+        { 'word': 'tornavida', 'category': 'hard' },
+        { 'word': 'zifiri', 'category': 'hard' }
     ];
 
     words.forEach(function(word) {
