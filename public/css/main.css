@@ -110,12 +110,13 @@ button.alphabet[disabled] {
     .numberContainer { position: absolute; top: 90px; }
 }
 
-@media only screen and (max-width : 480px) {
+@media only screen and (max-width : 640px) {
     canvas { display: none; }
     h1 { margin: 10px 0; }
     h1.title { font-size: 30px; }
-    .numberContainer { width: 100%; top: 150px; }
+    .numberContainer { width: 100%; top: 120px; }
     .buttons { width: 100%; position: fixed; bottom: 0; }
+    button.alphabet { width: 40px; height: 40px; font-size: 20px; }
 }
 
 
