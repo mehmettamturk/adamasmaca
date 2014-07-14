@@ -117,6 +117,14 @@ button.alphabet[disabled] {
     .numberContainer { width: 100%; top: 120px; }
     .buttons { width: 100%; position: fixed; bottom: 0; }
     button.alphabet { width: 40px; height: 40px; font-size: 20px; }
+    .resultContainer {
+        background: rgb(77, 218, 224);
+        z-index: 99;
+        position: absolute;
+        bottom: 0;
+        height: 160px;
+        padding-top: 20px;
+    }
 }
 
 
