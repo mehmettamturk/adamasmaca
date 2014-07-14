@@ -185,9 +185,9 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
 
         // Dar agaci :)
         drawLine(context, [120, 0], [120, 200], '#B22705', 4); // Right Wood
-        drawLine(context, [20, 2], [120, 2], '#B22705', 4); // Top Wood
+        drawLine(context, [10, 2], [120, 2], '#B22705', 4); // Top Wood
         drawLine(context, [50, 4], [50, 30 + add], 'black', 1); // Rope
-        drawLine(context, [10, 200], [140, 200], 'green', 4); // Ground
+        drawLine(context, [0, 200], [140, 200], 'green', 4); // Ground
         if (smile != 'dead') {
             drawLine(context, [15, 161], [85, 161], 'red', 3); // Top Taboret
             drawLine(context, [20, 161], [20, 198], 'red', 3); // Left Taboret
@@ -236,7 +236,6 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
         ctx.fill();
 
         if (strokeStyle && strokeStyle.length) {
-            console.log('ss')
             ctx.strokeStyle = strokeStyle;
             ctx.stroke();
         }
