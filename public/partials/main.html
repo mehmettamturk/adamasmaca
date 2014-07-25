@@ -66,8 +66,22 @@
 </div>
 
 
-
-
 <div class="userList">
-    <!-- Show user list here (Leaderboard) -->
+    <h2> Liderlik Tablosu </h2>
+    <table>
+        <tr>
+            <th class="rank"> Sıra </th>
+            <th class="username"> Kullanıcı </th>
+            <th class="score"> Puan </th>
+        </tr>
+    </table>
+    <div class="list">
+        <table>
+            <tr ng-repeat="user in users">
+                <td class="rank"> {{$index + 1}} </td>
+                <td class="username"> <a ng-href="#/user/{{user.username}}"> {{user.username}} </a> </td>
+                <td class="score"> {{user.score}} </td>
+            </tr>
+        </table>
+    </div>
 </div>

@@ -106,7 +106,18 @@ button.alphabet[disabled] {
 
 }
 
+.userList { padding: 10px; background: rgba(0,0,0,.2); border-radius: 3px; position: absolute; bottom: 0; right: 0; }
+.userList h2 { color: white; margin-bottom: 10px; text-align: center; }
+.userList .list { min-height: 100px; overflow-y: auto; overflow-x: hidden; display: block; position: relative; max-height: 100px; }
+.userList td, .userList th { text-align: center; height: 30px; vertical-align: middle; }
+.userList .rank { width: 50px; }
+.userList .username { width: 200px; }
+.userList .score { width: 50px; }
+.userList a { text-decoration: none; color: black; }
+.userList a:hover { color: #4936D6; }
+
 @media only screen and (max-width : 800px) {
+    .userList { display: none; }
     .numberContainer { position: absolute; top: 90px; }
 }
 
@@ -123,6 +134,7 @@ button.alphabet[disabled] {
         position: absolute;
         bottom: 0;
         height: 160px;
+        width: 100%;
         padding-top: 20px;
     }
 }

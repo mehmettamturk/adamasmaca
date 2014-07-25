@@ -17,7 +17,7 @@ angular.module('adamAsmaca', [ 'ngRoute' ]).config(['$routeProvider', function($
 }]);
 
 
-angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', function($scope, WordService) {
+angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', 'UserService', function($scope, WordService, UserService) {
     $scope.alphabet = "abcçdefgğhıijklmnoöprsştuüvyz".split('');
     $scope.totalPoints = 0;
     $scope.questionShown = false;
@@ -30,6 +30,10 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', fu
         hard: 30
     };
     $scope.mouthClass = 'happy';
+
+    UserService.getUserList(function(data) {
+        $scope.users = data;
+    });
 
     $scope.start = function() {
         $scope.totalPoints = 0;
@@ -311,6 +315,14 @@ angular.module('adamAsmaca').factory('UserService', function($http) {
             callback(data);
         })
     };
+
+    UserService.getUserList = function(callback) {
+        $http.get('/users').success(function(data) {
+            callback(data);
+        })
+    };
+
+
 
     return UserService;
 });
