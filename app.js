@@ -50,8 +50,7 @@ var Words = mongoose.model('Words', wordsSchema);
 app.get('/user/:username', function(req, res) {
     var username = req.params.username;
 
-    // Todo: 1 tane sonuç geliceği kesin olduğu için find yerine findAll kullanabiliriz.
-    User.find({ username:username }, "-password -score", function(err, data) {
+    User.findOne({ username: username }, "-password -score", function(err, data) {
         res.json(data);
     });
 });
