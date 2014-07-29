@@ -35,102 +35,99 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', 'U
         $scope.users = data;
     });
 
+    $scope.series = [];
     $scope.start = function() {
+        $scope.currentIndex = 0;
         $scope.totalPoints = 0;
         $scope.trial = 6;
-        WordService.getWord('easy', function(data) {
+
+        WordService.getSeries(function(data) {
+            $scope.series = data;
             $scope.questionShown = true;
-            $scope.showWord(data.word, data.category);
+            $scope.showWord($scope.series[$scope.currentIndex]);
         });
     };
 
     $scope.nextQuestion = function() {
         $scope.isCorrect = false;
         $scope.resultShown = false;
-        if ($scope.currentCategory == 'easy')
-            $scope.currentCategory = 'normal';
-        else if ($scope.currentCategory == 'normal')
-            $scope.currentCategory = 'hard';
-
-        WordService.getWord($scope.currentCategory, function(data) {
-            $scope.questionShown = true;
-            $scope.showWord(data.word, data.category);
-        });
+        $scope.currentIndex++;
+        $scope.showWord($scope.series[$scope.currentIndex]);
+        $scope.questionShown = true;
     };
 
-    $scope.showWord = function(word, category) {
+    $scope.showWord = function(word) {
+        console.log(word.category);
         $scope.resultShown = false;
-        $scope.word = word.toLowerCase();
         $scope.result = '';
         $scope.userChoices = [];
         $scope.trial = 6;
-        $scope.wordPoint = $scope.points[category];
+        $scope.wordPoint = $scope.points[word.category];
         $scope.mouthClass = 'happy';
 
-        for (var i = 0; i < $scope.word.length; i++) {
-            if ($scope.word[i] == ' ' || $scope.word[i] == '?')
-                $scope.result += $scope.word[i];
-            else
+        for (var i = 0; i < word.lengths; i++) {
+            for (var j = 0; j < word.lengths[i]; j++) {
                 $scope.result += '_';
+            }
+            $scope.result += '';
         }
 
-        $scope.drawStickman('happy');
+        $scope.drawStickman('happy', 0, true);
     };
 
     $scope.check = function(char) {
-        char = char.toLowerCase();
         var isFound = false;
         $scope.userChoices.push(char);
-        angular.forEach($scope.word, function(wordChar, index) {
-            if (wordChar == char) {
-                $scope.result = $scope.result.substr(0, index) + char + $scope.result.substr(index + 1);
+
+        var latestResult = angular.copy($scope.result);
+        WordService.check($scope.series[$scope.currentIndex]._id, char, $scope.result, function(data) {
+            $scope.result = data.result;
+            $scope.trial = data.trialCount;
+
+            if (latestResult != $scope.result)
                 isFound = true;
 
-                if ($scope.word == $scope.result) {
-                    $scope.totalPoints += ($scope.points[$scope.currentCategory] - (6 - $scope.trial));
-                    $scope.resultShown = true;
+            switch ($scope.trial) {
+                case 5: $scope.mouthClass = 'happy'; break;
+                case 4: $scope.mouthClass = 'middle'; break;
+                case 3: $scope.mouthClass = 'middle'; break;
+                case 2: $scope.mouthClass = 'sad'; break;
+                case 1: $scope.mouthClass = 'last'; break;
+                case 0: $scope.mouthClass = 'dead'; break;
+            }
+
+            if ($scope.result.indexOf('_') < 0) {
+                $scope.totalPoints += ($scope.points[$scope.series[$scope.currentIndex].category] - (6 - $scope.trial));
+                $scope.resultShown = true;
+                if ($scope.trial > 0) {
                     $scope.isCorrect = true;
-                    $scope.mouthClass = 'happy';
+                    $scope.mouthClass = 'won';
                 }
             }
+
+            if (!isFound) {
+                $scope.wordPoint--;
+
+                if ($scope.trial == 0) {
+                    $scope.resultShown = true;
+                    $scope.totalPoints = 0;
+                    $scope.drawStickman('dead', 0, true);
+                    $scope.animateCanvas();
+                }
+            } else
+                $scope.drawStickman($scope.mouthClass);
         });
-
-        switch ($scope.trial) {
-            case 5: $scope.mouthClass = 'happy'; break;
-            case 4: $scope.mouthClass = 'middle'; break;
-            case 3: $scope.mouthClass = 'middle'; break;
-            case 2: $scope.mouthClass = 'sad'; break;
-            case 1: $scope.mouthClass = 'last'; break;
-            case 0: $scope.mouthClass = 'dead'; break;
-        }
-
-        if ($scope.word == $scope.result)
-            $scope.mouthClass = 'won';
-        $scope.drawStickman($scope.mouthClass);
-
-        if (!isFound) {
-            $scope.trial--;
-            $scope.wordPoint--;
-
-            if ($scope.trial == 0) {
-                $scope.resultShown = true;
-                $scope.totalPoints = 0;
-                $scope.drawStickman('dead');
-                $scope.result = $scope.word;
-                $scope.animateCanvas();
-            }
-        }
     };
 
     setTimeout(function() { // Run draw method after all template load.
-        $scope.drawStickman('happy');
+        $scope.drawStickman('happy', 0, true);
     }, 0);
 
     $scope.animateCanvas = function() {
         var a = 0;
         var interval = setInterval(function() {
             a++;
-            $scope.drawStickman('dead', a);
+            $scope.drawStickman('dead', a, true);
             if (a == 10)
                 clearInterval(interval);
         }, 20);
@@ -143,7 +140,7 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', 'U
         canvas.width = w;
     }
 
-    $scope.drawStickman = function(smile, addPixel) {
+    $scope.drawStickman = function(smile, addPixel, hasClear) {
         var add = addPixel || 0;
         var canvas = document.getElementById('canvas');
         var context = canvas.getContext('2d');
@@ -301,6 +298,22 @@ angular.module('adamAsmaca').factory('WordService', function($http) {
         $http.get('/words/' + category).success(function(data) {
             callback(data);
         })
+    };
+
+    WordService.getSeries = function(callback) {
+        $http.get('/startNewGame').success(function(data) {
+            callback(data);
+        });
+    };
+
+    WordService.check = function(id, char, result, callback) {
+        $http.post('/check', {
+            id: id,
+            char: char,
+            result: result
+        }).success(function(data) {
+            callback(data);
+        });
     };
 
     return WordService;

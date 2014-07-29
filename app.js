@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var async = require('async');
+var session = require('express-session');
 
 var routes = require('./routes/index');
 
@@ -16,10 +18,12 @@ app.set('view engine', 'jade');
 
 app.use(favicon());
 app.use(logger('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
+app.use(bodyParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({secret: 'hangmansecret'}))
 
 app.use('/', routes);
 
@@ -61,6 +65,96 @@ app.get('/users', function(req, res) {
     });
 });
 
+
+app.get('/startNewGame', function(req, res) {
+    req.session.trialCount = 6;
+    var words = [];
+
+    var shapeData = function(wordsData) {
+        wordsData = wordsData.map(function(wordData) {
+            var data = wordData.toObject();
+            var word = data.word;
+            data.lengths = [];
+
+            var eachWord = word.split(' ');
+            for (var i = 0; i < eachWord.length; i++) {
+                data.lengths.push(eachWord[i].length);
+            }
+
+            delete data.word;
+            return data;
+        });
+
+        return wordsData;
+    };
+
+    var getWords = function(category, limit, callback) {
+        if (limit == 100)
+            Words.find({category: category}).exec(function (err, data) {
+                words = words.concat(shapeData(data));
+                callback();
+            });
+        else
+            Words.count({category: category}, function(err, count) {
+                var rand = Math.floor(Math.random() * count);
+                Words.find({category: category}).skip(rand).limit(limit).exec(function (err, data) {
+                    words = words.concat(shapeData(data));
+                    callback();
+                });
+            });
+    };
+
+    async.series([
+        function(callback) {
+            getWords('easy', 3, callback);
+        },
+        function(callback) {
+            getWords('normal', 4, callback);
+        },
+        function(callback) {
+            getWords('hard', 100, callback);
+        }
+    ], function(err, data) {
+        res.json(words);
+    });
+});
+
+
+app.post('/check', function(req, res) {
+    var id = req.body.id;
+    var char = req.body.char.toLowerCase();
+    var result = req.body.result;
+
+    if (req.session.questionId != id) {
+        req.session.trialCount = 6;
+        req.session.questionId = id;
+    }
+
+    Words.findOne({_id: id}, function(err, data) {
+        data.word = data.word.toLowerCase();
+        var foundAWord = false;
+        for (var i = 0; i < data.word.length; i++) {
+            if (data.word[i] == char) {
+                foundAWord = true;
+                result = result.substr(0, i) + char + result.substr(i + 1);
+            }
+        }
+
+        if (req.session.questionId == id && !foundAWord)
+            req.session.trialCount--;
+
+        if (req.session.trialCount == 0)
+            result = data.word;
+
+        res.send({
+            result: result,
+            trialCount: req.session.trialCount
+        });
+    });
+
+});
+
+
 app.get('/words/:category', function(req, res) {
     // Random Word
     Words.count({category: req.params.category}, function(err, count) {
@@ -73,7 +167,6 @@ app.get('/words/:category', function(req, res) {
 });
 
 module.exports = app;
-
 
 function setupDb() {
     var words = [
