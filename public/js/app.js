@@ -31,6 +31,13 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', 'U
     };
     $scope.mouthClass = 'happy';
 
+    UserService.getAccount(function(data) {
+        $scope.currentUser = data;
+        if (!$scope.currentUser.avatar) {
+            $scope.currentUser.avatar = '../img/user.jpeg';
+        }
+    });
+
     UserService.getUserList(function(data) {
         $scope.users = data;
     });
@@ -84,7 +91,7 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', 'U
             $scope.result = data.result;
             $scope.trial = data.trialCount;
 
-            if (latestResult != $scope.result)
+            if (latestResult == $scope.result)
                 isFound = true;
 
             switch ($scope.trial) {
@@ -113,6 +120,10 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', 'U
                     $scope.totalPoints = 0;
                     $scope.drawStickman('dead', 0, true);
                     $scope.animateCanvas();
+
+                    UserService.getUserList(function(data) {
+                        $scope.users = data;
+                    });
                 }
             } else
                 $scope.drawStickman($scope.mouthClass);
@@ -326,16 +337,20 @@ angular.module('adamAsmaca').factory('UserService', function($http) {
     UserService.getUser = function(username, callback) {
         $http.get('/user/' + username).success(function(data) {
             callback(data);
-        })
+        });
     };
 
     UserService.getUserList = function(callback) {
         $http.get('/users').success(function(data) {
             callback(data);
-        })
+        });
     };
 
-
+    UserService.getAccount = function(callback) {
+        $http.get('/account').success(function(data) {
+            callback(data);
+        });
+    };
 
     return UserService;
 });

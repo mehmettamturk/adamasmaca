@@ -50,12 +50,76 @@ var wordsSchema = new mongoose.Schema({
 
 var Words = mongoose.model('Words', wordsSchema);
 
+
+var getUniqueUsername = function(cb) {
+    var rand = Math.floor((Math.random() * 1000) + 1);
+    var newUsername = 'anonim' + rand;
+
+    User.findOne({'username': newUsername}, function(err, data) {
+        if (!data)
+            cb(newUsername);
+        else
+            getUniqueUsername(cb);
+    });
+};
+
+
+var updateUser = function(req, cb) {
+    var session = req.session;
+    User.findOne({'username': session.username}, function(err, doc) {
+        if (doc && parseInt(doc.score) < parseInt(session.totalPoints)) {
+            doc.score = session.totalPoints;
+            doc.save(cb);
+        }
+    })
+};
+
+
+var points = {
+    easy: 10,
+    normal: 20,
+    hard: 30
+};
+
+
 /* Requests */
+app.use(function(req, res, next) {
+    if (!req.session.username) {
+        getUniqueUsername(function(newUsername) {
+            var newUser = new User({
+                username: newUsername,
+                mail: '',
+                password: '',
+                score: 0
+            });
+
+            newUser.save(function(err, data) {
+                req.session.username = data.username;
+                req.session.totalPoints = 0;
+                next();
+            });
+        });
+    } else
+        next();
+});
+
+
 app.get('/user/:username', function(req, res) {
     var username = req.params.username;
 
     User.findOne({ username: username }, "-password -score", function(err, data) {
         res.json(data);
+    });
+});
+
+
+app.get('/account', function(req, res) {
+    var username;
+    if (req.session && req.session.username)
+        username = req.session.username;
+
+    res.send({
+        username: username
     });
 });
 
@@ -131,27 +195,33 @@ app.post('/check', function(req, res) {
     }
 
     Words.findOne({_id: id}, function(err, data) {
-        data.word = data.word.toLowerCase();
-        var foundAWord = false;
-        for (var i = 0; i < data.word.length; i++) {
-            if (data.word[i] == char) {
-                foundAWord = true;
+        var word = data.word.toLowerCase();
+        var foundAChar = false;
+        for (var i = 0; i < word.length; i++) {
+            if (word[i] == char) {
+                foundAChar = true;
                 result = result.substr(0, i) + char + result.substr(i + 1);
             }
         }
 
-        if (req.session.questionId == id && !foundAWord)
+        if (result == word)
+            req.session.totalPoints += points[data.category] - (6 - req.session.trialCount);
+
+        if (req.session.questionId == id && !foundAChar)
             req.session.trialCount--;
 
-        if (req.session.trialCount == 0)
-            result = data.word;
+        if (req.session.trialCount == 0) {
+            result = word;
+            updateUser(req, function() {
+                req.session.totalPoints = 0;
+            });
+        }
 
         res.send({
             result: result,
             trialCount: req.session.trialCount
         });
     });
-
 });
 
 

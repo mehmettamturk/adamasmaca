@@ -4,6 +4,10 @@
     <button ng-click="start(); hideStartButton = true;"> Başla </button>
 </div>
 
+<div class="currentUser">
+    <img ng-src="{{currentUser.avatar}}" alt="Avatar"/>
+    <span>{{currentUser.username}}</span>
+</div>
 
 <h1 class="result" ng-bind="result"></h1>
 

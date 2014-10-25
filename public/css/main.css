@@ -116,6 +116,27 @@ button.alphabet[disabled] {
 .userList a { text-decoration: none; color: black; }
 .userList a:hover { color: #4936D6; }
 
+.currentUser {
+    position: absolute;
+    top: 0;
+    margin: 20px;
+}
+
+.currentUser img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    float: left;
+}
+
+.currentUser span {
+    line-height: 50px;
+    display: inline-block;
+    height: 50px;
+    float: left;
+    margin-left: 10px;
+}
+
 @media only screen and (max-width : 800px) {
     .userList { display: none; }
     .numberContainer { position: absolute; top: 90px; }
