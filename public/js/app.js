@@ -24,23 +24,52 @@ angular.module('adamAsmaca').controller('MainCtrl', ['$scope', 'WordService', 'U
     $scope.resultShown = false;
     $scope.currentCategory = 'easy';
     $scope.isCorrect = false;
+    $scope.newUser = {};
+    $scope.showEmailInput = false;
     $scope.points = {
         easy: 10,
         normal: 20,
         hard: 30
     };
     $scope.mouthClass = 'happy';
+    $scope.isLoggedIn = false;
 
     UserService.getAccount(function(data) {
         $scope.currentUser = data;
-        if (!$scope.currentUser.avatar) {
+        if (!$scope.currentUser.avatar)
             $scope.currentUser.avatar = '../img/user.jpeg';
-        }
+
+        if (data.facebookId)
+            $scope.isLoggedIn = true;
+
+        UserService.getUserList(function(data) {
+            $scope.users = data;
+        });
     });
 
-    UserService.getUserList(function(data) {
-        $scope.users = data;
-    });
+    /* Login Methods */
+    $scope.login = function() {
+        $scope.showEmailInput = false;
+        delete $scope.newUser.mail;
+
+        UserService.login($scope.newUser, function(data) {
+            console.log('login');
+        });
+    };
+
+    $scope.register = function() {
+        if (!$scope.newUser.mail) {
+            $scope.showEmailInput = true;
+            return;
+        }
+
+        UserService.register($scope.newUser, function(data) {
+            console.log('register response')
+            console.log(data)
+        });
+
+    };
+    /* -- | -- */
 
     $scope.series = [];
     $scope.start = function() {
@@ -352,6 +381,18 @@ angular.module('adamAsmaca').factory('UserService', function($http) {
         });
     };
 
+    UserService.login = function(data, callback) {
+        $http.post('/login', angular.toJson(data)).success(function(data) {
+            callback(data);
+        });
+    };
+
+    UserService.register = function(data, callback) {
+        $http.post('/register', angular.toJson(data)).success(function(data) {
+            callback(data);
+        });
+    };
+
     return UserService;
 });
 
@@ -362,4 +403,27 @@ angular.module('adamAsmaca').filter('capitalize', function() {
             return '';
         return input.substring(0,1).toUpperCase() + input.substring(1);
     }
+});
+
+angular.module('adamAsmaca').directive('focusWhen', function($timeout, $parse) {
+    return {
+        //scope: true,   // optionally create a child scope
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.focusMe);
+            scope.$watch(model, function(value) {
+                console.log('value=',value);
+                if(value === true) {
+                    $timeout(function() {
+                        element[0].focus();
+                    });
+                }
+            });
+            // to address @blesh's comment, set attribute value to 'false'
+            // on blur event:
+            element.bind('blur', function() {
+                console.log('blur');
+                scope.$apply(model.assign(scope, false));
+            });
+        }
+    };
 });

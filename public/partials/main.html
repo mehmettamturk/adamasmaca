@@ -1,12 +1,40 @@
+<!--<div-->
+        <!--class="fb-like"-->
+        <!--data-share="true"-->
+        <!--data-width="450"-->
+        <!--data-show-faces="true">-->
+<!--</div>-->
+
 <h1 class="title"> adam asmaca </h1>
 
 <div class="buttonContainer" ng-hide="hideStartButton">
-    <button ng-click="start(); hideStartButton = true;"> Başla </button>
+    <button ng-click="start(); hideStartButton = true;"> başla </button>
 </div>
 
 <div class="currentUser">
     <img ng-src="{{currentUser.avatar}}" alt="Avatar"/>
-    <span>{{currentUser.username}}</span>
+    <span class="username">{{currentUser.username}}</span>
+    <span class="loginSettings" ng-mouseover="showLoginBox = true" ng-mouseleave="showLoginBox = false">
+        <span class="icon icon-ic_settings_white_24dp"></span>
+        <div class="loginBox" ng-show="showLoginBox">
+            <div ng-if="isLoggedIn">
+                <a class="loginButton logout" href="/logout"> çıkış </a>
+            </div>
+            <div ng-if="!isLoggedIn">
+                <!--<div class="localLogin">-->
+                    <!--<input type="text" placeholder="kullanıcı adı" ng-model="newUser.username">-->
+                    <!--<input type="password" placeholder="parola" ng-model="newUser.password">-->
+                    <!--<input type="email" placeholder="email" ng-model="newUser.mail" ng-show="showEmailInput" focusWhen="showEmailInput">-->
+                    <!--<a class="loginButton local first" ng-click="login()"> giriş </a>-->
+                    <!--<a class="loginButton local" ng-click="register()"> kayıt </a>-->
+                <!--</div>-->
+                <div class="socialLogin">
+                    <a class="loginButton facebook" href="/auth/facebook"> facebook ile bağlan </a>
+                    <!--<a class="loginButton twitter"> twitter ile bağlan </a>-->
+                </div>
+            </div>
+        </div>
+    </span>
 </div>
 
 <h1 class="result" ng-bind="result"></h1>
@@ -71,21 +99,28 @@
 
 
 <div class="userList">
-    <h2> Liderlik Tablosu </h2>
-    <table>
-        <tr>
-            <th class="rank"> Sıra </th>
-            <th class="username"> Kullanıcı </th>
-            <th class="score"> Puan </th>
-        </tr>
-    </table>
-    <div class="list">
-        <table>
-            <tr ng-repeat="user in users">
-                <td class="rank"> {{$index + 1}} </td>
-                <td class="username"> <a ng-href="#/user/{{user.username}}"> {{user.username}} </a> </td>
-                <td class="score"> {{user.score}} </td>
-            </tr>
-        </table>
+    <div class="header" ng-click="showLeaderboard = !showLeaderboard">
+        <h2> liderlik tablosu <span> {{ showLeaderboard ? '&#10548;' : '&#10549;' }}</span> </h2>
+    </div>
+    <div class="table" ng-show="showLeaderboard">
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<th class="rank"> sıra </th>-->
+                <!--<th class="username"> kullanıcı </th>-->
+                <!--<th class="score"> puan </th>-->
+            <!--</tr>-->
+        <!--</table>-->
+        <div class="list">
+            <table>
+                <tr ng-repeat="user in users">
+                    <td class="rank"> {{$index + 1}} </td>
+                    <td class="username">
+                        <img ng-src="{{user.avatar || '../img/user.jpeg'}}" alt=""/>
+                        <a ng-href="#/user/{{user.username}}"> {{user.username}} </a>
+                    </td>
+                    <td class="score"> {{user.score}} puan </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>

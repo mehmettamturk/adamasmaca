@@ -10,6 +10,9 @@ var session = require('express-session');
 
 var routes = require('./routes/index');
 
+var passport = require('passport'),
+    FacebookStrategy = require('passport-facebook').Strategy;
+
 var app = express();
 
 // view engine setup
@@ -24,9 +27,10 @@ app.use(bodyParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(session({secret: 'hangmansecret'}))
-
+app.use(express.static(__dirname + '/public'));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/', routes);
-
 
 /* Database Schemas */
 mongoose.connect('mongodb://localhost/adamasmaca');
@@ -38,7 +42,9 @@ var userSchema = new mongoose.Schema({
     username: String,
     mail: String,
     password: String,
-    score: Number
+    score: Number,
+    facebookId: String,
+    avatar: String
 });
 
 var User = mongoose.model('User', userSchema);
@@ -49,6 +55,77 @@ var wordsSchema = new mongoose.Schema({
 });
 
 var Words = mongoose.model('Words', wordsSchema);
+
+var noMoreTurkish = function(text) {
+    text = text.replace(/ı/g,"i");
+    text = text.replace(/ö/g,"o");
+    text = text.replace(/ü/g,"u");
+    text = text.replace(/ğ/g,"g");
+    text = text.replace(/ş/g,"s");
+    text = text.replace(/ç/g,"c");
+    return text;
+};
+
+
+passport.use(new FacebookStrategy({
+        clientID: '306165839577311',
+        clientSecret: '7a899843d1e892e9dee2bf9fdd72d191',
+        callbackURL: "http://dev.adamasmaca.com/auth/facebook/callback",
+        passReqToCallback: true
+    },
+    function(req, accessToken, refreshToken, profile, done) {
+        console.log(profile)
+        var usernameData = profile.displayName.split(' ');
+        var username = usernameData[0].toLowerCase() + (usernameData[1] ? usernameData[1].toLowerCase() : '');
+        username = noMoreTurkish(username);
+
+        var query = { $or: [ { 'username': req.session.username }, { 'mail': profile.emails[0].value } ] };
+        User.find(query, function(err, users) {
+            if (err) return done(err, null);
+
+            if (users.length > 1) {
+                var combinedUser = users[0].facebookId ? users[0] : users[1];
+                var deletedUser = users[0].facebookId ? users[1] : users[0];
+                combinedUser.score = users[0].score > users[1].score ? users[0].score : users[1].score;
+
+                combinedUser.save(function(err, savedUser) {
+                    User.findOneAndRemove({'_id': deletedUser._id}, function(err, res) {
+                        console.log('User deleted: ' + deletedUser._id);
+                        req.session.user = combinedUser;
+                        req.session.username = combinedUser.username;
+                        done(err, savedUser);
+                    });
+                })
+
+            } else {
+                var user = users[0];
+                user.username = username;
+                user.displayName = profile.displayName;
+                user.mail = profile.emails[0].value;
+                user.facebookId = profile.id;
+                user.avatar = '//graph.facebook.com/' + profile.id + '/picture';
+
+                user.save(function(err, doc) {
+                    req.session.user = doc;
+                    req.session.username = username;
+                    done(err, doc);
+                });
+            }
+        });
+    }
+));
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
+
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: [ 'email' ] }));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/' }));
+
 
 
 var getUniqueUsername = function(cb) {
@@ -75,6 +152,23 @@ var updateUser = function(req, cb) {
 };
 
 
+app.post('/login', function(req, res) {
+    res.send('login')
+});
+
+
+app.post('/register', function(req, res) {
+    res.send('register')
+});
+
+app.get('/logout', function(req, res) {
+    delete req.session.user;
+    delete req.session.username;
+    req.logout();
+    res.redirect('/');
+});
+
+
 var points = {
     easy: 10,
     normal: 20,
@@ -83,8 +177,17 @@ var points = {
 
 
 /* Requests */
-app.use(function(req, res, next) {
-    if (!req.session.username) {
+app.get('/user/:username', function(req, res) {
+    var username = req.params.username;
+
+    User.findOne({ username: username }, "-password -score", function(err, data) {
+        res.json(data);
+    });
+});
+
+
+app.get('/account', function(req, res) {
+    if (!req.session.username)
         getUniqueUsername(function(newUsername) {
             var newUser = new User({
                 username: newUsername,
@@ -96,31 +199,17 @@ app.use(function(req, res, next) {
             newUser.save(function(err, data) {
                 req.session.username = data.username;
                 req.session.totalPoints = 0;
-                next();
+                res.send({
+                    username: req.session.username
+                });
             });
         });
-    } else
-        next();
-});
-
-
-app.get('/user/:username', function(req, res) {
-    var username = req.params.username;
-
-    User.findOne({ username: username }, "-password -score", function(err, data) {
-        res.json(data);
-    });
-});
-
-
-app.get('/account', function(req, res) {
-    var username;
-    if (req.session && req.session.username)
-        username = req.session.username;
-
-    res.send({
-        username: username
-    });
+    else {
+        var userData = req.session.user || {
+            username: req.session.username
+        };
+        res.send(userData);
+    }
 });
 
 app.get('/users', function(req, res) {
@@ -280,36 +369,6 @@ function setupDb() {
             if (!data.length) {
                 var dbWord = new Words(word);
                 dbWord.save();
-            }
-        })
-    });
-
-    var users = [
-        {
-            username: 'fatma',
-            mail: 'fatma@gmail.com',
-            password: '123456',
-            score: 15
-        },
-        {
-            username: 'esra',
-            mail: 'esra@gmail.com',
-            password: '123456',
-            score: 18
-        },
-        {
-            'username': 'mehmet',
-            'mail': 'mehmet@gmail.com',
-            'password': '123456',
-            'score': 7
-        }
-    ];
-
-    users.forEach(function(user) {
-        User.find({mail: user.mail}, function(err, data) {
-            if (!data.length) {
-                var dbUser = new User(user);
-                dbUser.save();
             }
         })
     });

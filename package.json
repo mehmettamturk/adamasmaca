@@ -15,6 +15,7 @@
     "mongoose": "*",
     "async": "*",
     "passport": "*",
+    "passport-facebook": "*",
     "express-session": "*"
   }
 }
