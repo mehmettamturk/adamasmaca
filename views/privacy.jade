@@ -1,0 +1,39 @@
+doctype html
+html(ng-app='adamAsmaca')
+    head
+        meta(charset='utf-8')
+        meta(name='apple-mobile-web-app-capable', content='yes')
+        meta(name='apple-mobile-web-app-status-bar-style', content='black-translucent')
+        meta(name='viewport', id='viewPort', content='user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width')
+        title= title
+        link(rel='stylesheet', href='/css/reset.css')
+        link(rel='stylesheet', href='/css/main.css')
+    body
+        div
+            a(href="/") Ana Sayfa
+            p
+            | Bu beyan adam asmaca oyununun gizlilik politikasını içerir. adamasmaca.mehmettamturk.com web sitesini ziyaret ederek aşağıdaki şartları ve kuralları uygulamayı kabul etmiş sayılmaktasınız.
+            | adamasmaca.mehmettamturk.com üyelik aşamasında ve daha sonrasında sizden bazı kişisel bilgilerinizi talep eder. Kişisel bilgilerinizin korunması ve gizliliğinizin sürdürülebilmesi, adamasmaca.mehmettamturk.com ekibi olarak birinci önceliğimizdir. Bu nedenle vermiş olduğunuz bilgiler, Üyelik Sözleşmesi’nde belirtilen kurallar ve amaçlar dışında herhangi bir kapsamda kullanılmayacak, üçüncü şahıslarla paylaşılmayacaktır.
+            | Sistemle ilgili sorunların tespiti ve söz konusu sorunların en hızlı şekilde giderilebilmesi için, adamasmaca.mehmettamturk.com, gerektiğinde kullanıcıların IP adresini tespit etmekte ve bunu kullanmaktadır. IP adresleri, kullanıcıları genel bir şekilde tanımlamak ve kapsamlı demografik bilgi toplamak amacıyla da kullanılabilir.
+            | Sitemizdeki kayıt formları, sipariş formları, anketler ve yarışmalarda, irtibat bilgilerinizi (adınız, soyadınız, email adresiniz, telefon numaralarınız ve posta adresiniz) vermeniz talep edilmektedir. Ayrıca, satın alma formunda kredi kartı bilgilerinizi vermeniz gerekmektedir. Yukarıda bahsedilen kişisel bilgileriniz; siparişlerinizi almak, ürün ve hizmetlerimizi sunmak, ödemelerinizi gerçekleştirmek, siparişlerinizi ulaştırmak ve siparişleriniz ile ilgili bilgi vermek, ürünler ve hizmetler hakkında pazarlama amacıyla sizinle irtibata geçmek, bilgilerinizi güncellemek, üyeliğinizi yönetmek ve sürdürmek, ilginizi çekebilecek ürün ve hizmetleri önermek ve 3. şahısların teknik, lojistik ve benzeri diğer işlevlerini bizim adımıza yerine getirmelerini sağlamak amacıyla kullanılmaktadır.
+        script(src='/components/jquery/jquery.min.js')
+        script(src='/components/angular/angular.min.js')
+        script(src='/components/angular/angular-route.min.js')
+        script(src='/js/app.js')
+        script.
+            window.fbAsyncInit = function() {
+              FB.init({
+                appId      : '306165839577311',
+                cookie      : true,
+                xfbml      : true,
+                version    : 'v2.1'
+              });
+            };
+            (function(d, s, id){
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) {return;}
+               js = d.createElement(s); js.id = id;
+               js.src = "//connect.facebook.net/en_US/sdk.js";
+               fjs.parentNode.insertBefore(js, fjs);
+             }(document, 'script', 'facebook-jssdk'));
+
