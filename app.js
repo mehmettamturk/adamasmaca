@@ -71,10 +71,15 @@ passport.use(new FacebookStrategy({
         clientID: '306165839577311',
         clientSecret: '7a899843d1e892e9dee2bf9fdd72d191',
         callbackURL: "http://adamasmaca.mehmettamturk.com/auth/facebook/callback",
+        profileFields: [ "id", "name", "link", "gender", "locale", "age_range", "displayName", "photos", "email" ],
         passReqToCallback: true
     },
     function(req, accessToken, refreshToken, profile, done) {
         console.log(profile)
+
+        if (!profile.emails)
+            done({err: 'no email.'}, null);
+
         var usernameData = profile.displayName.split(' ');
         var username = usernameData[0].toLowerCase() + (usernameData[1] ? usernameData[1].toLowerCase() : '');
         username = noMoreTurkish(username);
