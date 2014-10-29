@@ -70,7 +70,7 @@ var noMoreTurkish = function(text) {
 passport.use(new FacebookStrategy({
         clientID: '306165839577311',
         clientSecret: '7a899843d1e892e9dee2bf9fdd72d191',
-        callbackURL: "http://dev.adamasmaca.com/auth/facebook/callback",
+        callbackURL: "http://adamasmaca.mehmettamturk.com/auth/facebook/callback",
         passReqToCallback: true
     },
     function(req, accessToken, refreshToken, profile, done) {
