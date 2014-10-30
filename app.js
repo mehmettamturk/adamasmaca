@@ -77,14 +77,11 @@ passport.use(new FacebookStrategy({
     function(req, accessToken, refreshToken, profile, done) {
         console.log(profile)
 
-        if (!profile.emails)
-            done({err: 'no email.'}, null);
-
         var usernameData = profile.displayName.split(' ');
         var username = usernameData[0].toLowerCase() + (usernameData[1] ? usernameData[1].toLowerCase() : '');
         username = noMoreTurkish(username);
 
-        var query = { $or: [ { 'username': req.session.username }, { 'mail': profile.emails[0].value } ] };
+        var query = { $or: [ { 'username': req.session.username }, { 'facebookId': profile.id } ] };
         User.find(query, function(err, users) {
             if (err) return done(err, null);
 
@@ -106,7 +103,7 @@ passport.use(new FacebookStrategy({
                 var user = users[0];
                 user.username = username;
                 user.displayName = profile.displayName;
-                user.mail = profile.emails[0].value;
+                user.mail = profile.emails && profile.emails[0].value;
                 user.facebookId = profile.id;
                 user.avatar = '//graph.facebook.com/' + profile.id + '/picture';
 
