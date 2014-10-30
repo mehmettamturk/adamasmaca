@@ -1,6 +1,5 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -19,7 +18,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(favicon(__dirname + '/public/img/favicon.ico'));
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
@@ -70,7 +68,7 @@ var noMoreTurkish = function(text) {
 passport.use(new FacebookStrategy({
         clientID: '306165839577311',
         clientSecret: '7a899843d1e892e9dee2bf9fdd72d191',
-        callbackURL: "http://adamasmaca.mehmettamturk.com/auth/facebook/callback",
+        callbackURL: "http://dev.adamasmaca.com/auth/facebook/callback",
         profileFields: [ "id", "name", "link", "gender", "locale", "age_range", "displayName", "photos", "email" ],
         passReqToCallback: true
     },
@@ -148,7 +146,8 @@ var updateUser = function(req, cb) {
     User.findOne({'username': session.username}, function(err, doc) {
         if (doc && parseInt(doc.score) < parseInt(session.totalPoints)) {
             doc.score = session.totalPoints;
-            doc.save(cb);
+            req.session.totalPoints = 0;
+            doc.save();
         }
     })
 };
@@ -303,9 +302,7 @@ app.post('/check', function(req, res) {
 
         if (req.session.trialCount == 0) {
             result = word;
-            updateUser(req, function() {
-                req.session.totalPoints = 0;
-            });
+            updateUser(req);
         }
 
         res.send({
